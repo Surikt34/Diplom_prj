@@ -2,6 +2,7 @@ from django.db import models
 
 
 class Category(models.Model):
+    objects = models.Manager()
     name = models.CharField(max_length=255, unique=True, verbose_name="Название категории")
     description = models.TextField(blank=True, null=True, verbose_name="Описание категории")
     parent = models.ForeignKey(
@@ -22,6 +23,7 @@ class Category(models.Model):
 
 
 class Supplier(models.Model):
+    objects = models.Manager()
     name = models.CharField(max_length=255, unique=True, verbose_name="Название поставщика")
     email = models.EmailField(verbose_name="Email поставщика")
     phone = models.CharField(max_length=20, blank=True, verbose_name="Телефон поставщика")
@@ -37,6 +39,7 @@ class Supplier(models.Model):
 
 
 class Product(models.Model):
+    objects = models.Manager()
     name = models.CharField(max_length=255, verbose_name="Название товара")
     category = models.ForeignKey(
         Category,
