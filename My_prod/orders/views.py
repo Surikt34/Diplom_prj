@@ -6,7 +6,7 @@ from rest_framework.views import APIView
 
 from .models import Order, OrderItem, Cart, CartItem, Contact
 from .serializers import OrderSerializer, CreateOrderSerializer, CartSerializer, ContactSerializer
-from My_prod.catalog.models import Product
+from catalog.models import Product
 
 
 class OrderListView(generics.ListAPIView):
