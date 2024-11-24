@@ -7,6 +7,7 @@ from rest_framework.views import APIView
 from .models import Order, OrderItem, Cart, CartItem, Contact
 from .serializers import OrderSerializer, CreateOrderSerializer, CartSerializer, ContactSerializer
 from catalog.models import Product
+from .utils import send_order_confirmation  # Импорт функции отправки email
 
 
 class OrderListView(generics.ListAPIView):
@@ -60,14 +61,39 @@ class ContactView(APIView):
         return Response(serializer.errors)
 
 class ConfirmOrderView(APIView):
+    permission_classes = [IsAuthenticated]
+
     def post(self, request):
-        cart = request.user.cart
-        contact = Contact.objects.get(id=request.data['contact_id'])
-        order = Order.objects.create(user=request.user, total_price=cart.total_price)
+        user = request.user
+        cart = user.cart
+        contact_id = request.data.get('contact_id')
+
+        if not contact_id:
+            return Response({"error": "Contact ID is required"}, status=400)
+
+        try:
+            contact = Contact.objects.get(id=contact_id, user=user)
+        except Contact.DoesNotExist:
+            return Response({"error": "Invalid contact ID"}, status=400)
+
+        # Создание заказа
+        order = Order.objects.create(user=user, total_price=cart.items.aggregate(total=models.Sum('product__price'))['total'])
+
         for item in cart.items.all():
-            OrderItem.objects.create(order=order, product=item.product, quantity=item.quantity, price=item.product.price)
+            OrderItem.objects.create(
+                order=order,
+                product=item.product,
+                quantity=item.quantity,
+                price=item.product.price
+            )
+
+        # Очистка корзины после оформления заказа
         cart.items.all().delete()
-        return Response(OrderSerializer(order).data)
+
+        # Отправка подтверждения заказа на email
+        send_order_confirmation(order)
+
+        return Response(OrderSerializer(order).data, status=201)
 
 class OrderHistoryView(ListAPIView):
     queryset = Order.objects.all()
