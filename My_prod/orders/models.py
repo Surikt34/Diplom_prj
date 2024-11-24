@@ -73,3 +73,16 @@ class CartItem(models.Model):
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE, related_name='items')
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(default=1)
+
+
+class Contact(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    last_name = models.CharField(max_length=100)
+    first_name = models.CharField(max_length=100)
+    middle_name = models.CharField(max_length=100, blank=True)
+    phone = models.CharField(max_length=15)
+    city = models.CharField(max_length=100)
+    street = models.CharField(max_length=100)
+    house = models.CharField(max_length=50)
+    building = models.CharField(max_length=50, blank=True)
+    apartment = models.CharField(max_length=50, blank=True)
