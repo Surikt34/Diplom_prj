@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'catalog',
     'orders',
     'drf_spectacular',
+    'django_filters',
 ]
 
 MIDDLEWARE = [
