@@ -1,7 +1,7 @@
 from rest_framework import generics, status
 from rest_framework.generics import ListAPIView
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.views import APIView
 
 from .models import Order, OrderItem, Cart, CartItem, Contact
@@ -101,4 +101,13 @@ class OrderHistoryView(ListAPIView):
 
     def get_queryset(self):
         return self.queryset.filter(user=self.request.user)
+
+class UpdateOrderStatusView(APIView):
+    permission_classes = [IsAdminUser]
+
+    def patch(self, request, pk):
+        order = Order.objects.get(id=pk)
+        order.status = request.data.get('status')
+        order.save()
+        return Response({"success": True, "status": order.status})
 
