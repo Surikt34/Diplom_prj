@@ -1,4 +1,5 @@
 from rest_framework import generics, status
+from rest_framework.generics import ListAPIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
@@ -67,3 +68,11 @@ class ConfirmOrderView(APIView):
             OrderItem.objects.create(order=order, product=item.product, quantity=item.quantity, price=item.product.price)
         cart.items.all().delete()
         return Response(OrderSerializer(order).data)
+
+class OrderHistoryView(ListAPIView):
+    queryset = Order.objects.all()
+    serializer_class = OrderSerializer
+
+    def get_queryset(self):
+        return self.queryset.filter(user=self.request.user)
+
