@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 
-from .models import Order, OrderItem, Cart, CartItem
+from .models import Order, OrderItem, Cart, CartItem, Contact
 from .serializers import OrderSerializer, CreateOrderSerializer, CartSerializer, ContactSerializer
 from My_prod.catalog.models import Product
 
@@ -57,3 +57,13 @@ class ContactView(APIView):
             serializer.save(user=request.user)
             return Response(serializer.data)
         return Response(serializer.errors)
+
+class ConfirmOrderView(APIView):
+    def post(self, request):
+        cart = request.user.cart
+        contact = Contact.objects.get(id=request.data['contact_id'])
+        order = Order.objects.create(user=request.user, total_price=cart.total_price)
+        for item in cart.items.all():
+            OrderItem.objects.create(order=order, product=item.product, quantity=item.quantity, price=item.product.price)
+        cart.items.all().delete()
+        return Response(OrderSerializer(order).data)
