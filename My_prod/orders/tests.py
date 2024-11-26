@@ -91,3 +91,22 @@ class OrderAPITestCase(APITestCase):
         response = self.client.post(self.order_url, data)
         self.assertEqual(response.status_code, 201)
         self.assertEqual(Order.objects.count(), 1)
+
+
+class OrderHistoryAPITestCase(APITestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(email="testuser@example.com", password="password123")
+        self.order = Order.objects.create(user=self.user, total_price=1000)
+        self.client.force_authenticate(user=self.user)
+        self.orders_url = '/api/orders/'
+
+    def test_get_orders(self):
+        response = self.client.get(self.orders_url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertGreater(len(response.data), 0)
+
+    def test_get_order_detail(self):
+        order_detail_url = f'/api/orders/{self.order.id}/'
+        response = self.client.get(order_detail_url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['id'], self.order.id)
