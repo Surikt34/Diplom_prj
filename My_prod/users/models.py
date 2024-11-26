@@ -1,6 +1,6 @@
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.db import models
-
+from django.core.validators import RegexValidator
 
 class CustomUserManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
@@ -32,7 +32,13 @@ class CustomUser(AbstractUser):
         ('admin', 'Admin'),
     )
     role = models.CharField(max_length=20, choices=ROLE_CHOICES, default='client', verbose_name="Роль")
-    phone = models.CharField(max_length=15, blank=True, null=True, verbose_name="Телефон")
+    phone = models.CharField(
+        max_length=15,
+        blank=True,
+        null=True,
+        verbose_name="Телефон",
+        validators=[RegexValidator(regex=r'^\+?1?\d{9,15}$', message="Введите корректный номер телефона")]
+    )
     address = models.TextField(blank=True, null=True, verbose_name="Адрес")
     date_of_birth = models.DateField(blank=True, null=True, verbose_name="Дата рождения")
     avatar = models.ImageField(upload_to='avatars/', blank=True, null=True, verbose_name="Аватар")
