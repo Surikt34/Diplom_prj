@@ -3,6 +3,7 @@ from django.db import models
 from django.core.validators import RegexValidator
 
 class CustomUserManager(BaseUserManager):
+    # Метод для создания пользователя
     def create_user(self, email, password=None, **extra_fields):
         if not email:
             raise ValueError('The Email field must be set')
@@ -13,6 +14,7 @@ class CustomUserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
+    # Метод для создания суперпользователя
     def create_superuser(self, email, password=None, **extra_fields):
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
