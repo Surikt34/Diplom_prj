@@ -4,9 +4,9 @@ from celery import Celery
 
 
 # Установка настроек Django для Celery
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'netology_pd_diplom.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'My_prod.settings')
 
-app = Celery('netology_pd_diplom')
+app = Celery('My_prod')
 
 # настройки Django как основу для конфигурации Celery
 app.config_from_object('django.conf:settings', namespace='CELERY')
