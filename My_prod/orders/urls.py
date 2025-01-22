@@ -11,4 +11,5 @@ urlpatterns = [
     path('confirm/', ConfirmOrderView.as_view(), name='order-confirm'),
     path('history/', OrderHistoryView.as_view(), name='order-history'),
     path('<int:pk>/status/', UpdateOrderStatusView.as_view(), name='order-update-status'),
+    path('cart/<int:pk>/', CartView.as_view(), name='cart-delete'),
 ]

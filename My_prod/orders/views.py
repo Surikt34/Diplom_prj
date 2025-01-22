@@ -46,8 +46,13 @@ class CartView(APIView):
     def post(self, request):
         cart, _ = Cart.objects.get_or_create(user=request.user)
         product = Product.objects.get(id=request.data['product_id'])
-        item, _ = CartItem.objects.get_or_create(cart=cart, product=product)
-        item.quantity = request.data['quantity']
+        quantity = int(request.data.get('quantity', 1))  # Преобразуем значение в int
+
+        item, created = CartItem.objects.get_or_create(cart=cart, product=product)
+        if not created:
+            item.quantity += quantity
+        else:
+            item.quantity = quantity
         item.save()
         return Response({'success': True})
 
@@ -60,8 +65,8 @@ class ContactView(APIView):
         serializer = ContactSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save(user=request.user)
-            return Response(serializer.data)
-        return Response(serializer.errors)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class ConfirmOrderView(APIView):
     permission_classes = [IsAuthenticated]
