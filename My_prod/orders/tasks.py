@@ -37,3 +37,12 @@ def send_order_status_update_task(order_id, status):
         return f"Уведомление об обновлении статуса заказа #{order.id} отправлено."
     except Order.DoesNotExist:
         return f"Заказ с ID {order_id} не найден."
+
+@shared_task
+def clear_cart_task(cart_id):
+    """
+    Очистка корзины после подтверждения заказа.
+    """
+    from orders.models import Cart
+    cart = Cart.objects.get(id=cart_id)
+    cart.items.all().delete()

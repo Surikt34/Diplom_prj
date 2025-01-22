@@ -9,8 +9,8 @@ from .models import Order, OrderItem, Cart, CartItem, Contact
 from .serializers import OrderSerializer, CreateOrderSerializer, CartSerializer, ContactSerializer
 from catalog.models import Product
 from .utils import send_order_confirmation
-from .tasks import send_order_confirmation_task
-from .tasks import send_order_status_update_task
+from .tasks import send_order_confirmation_task, send_order_status_update_task, send_order_confirmation_task, clear_cart_task
+
 
 
 class OrderListView(generics.ListAPIView):
@@ -63,41 +63,6 @@ class ContactView(APIView):
             return Response(serializer.data)
         return Response(serializer.errors)
 
-# class ConfirmOrderView(APIView):
-#     permission_classes = [IsAuthenticated]
-#
-#     def post(self, request):
-#         user = request.user
-#         cart = user.cart
-#         contact_id = request.data.get('contact_id')
-#
-#         if not contact_id:
-#             return Response({"error": "Contact ID is required"}, status=400)
-#
-#         try:
-#             contact = Contact.objects.get(id=contact_id, user=user)
-#         except Contact.DoesNotExist:
-#             return Response({"error": "Invalid contact ID"}, status=400)
-#
-#         # Создание заказа
-#         order = Order.objects.create(user=user, total_price=cart.items.aggregate(total=models.Sum('product__price'))['total'])
-#
-#         for item in cart.items.all():
-#             OrderItem.objects.create(
-#                 order=order,
-#                 product=item.product,
-#                 quantity=item.quantity,
-#                 price=item.product.price
-#             )
-#
-#         # Очистка корзины после оформления заказа
-#         cart.items.all().delete()
-#
-#         # Отправка подтверждения заказа на email
-#         send_order_confirmation(order)
-#
-#         return Response(OrderSerializer(order).data, status=201)
-
 class ConfirmOrderView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -128,10 +93,10 @@ class ConfirmOrderView(APIView):
                 price=item.product.price
             )
 
-        # Очистка корзины после оформления заказа
-        cart.items.all().delete()
+        # Асинхронная очистка корзины
+        clear_cart_task.delay(cart.id)
 
-        # Асинхронная отправка подтверждения заказа
+        # Асинхронная отправка email-подтверждения
         send_order_confirmation_task.delay(order.id)
 
         return Response(OrderSerializer(order).data, status=201)
@@ -142,16 +107,6 @@ class OrderHistoryView(ListAPIView):
 
     def get_queryset(self):
         return self.queryset.filter(user=self.request.user)
-
-# class UpdateOrderStatusView(APIView):
-#     permission_classes = [IsAdminUser]
-#
-#     def patch(self, request, pk):
-#         order = Order.objects.get(id=pk)
-#         order.status = request.data.get('status')
-#         order.save()
-#         return Response({"success": True, "status": order.status})
-
 
 class UpdateOrderStatusView(APIView):
     permission_classes = [IsAdminUser]
