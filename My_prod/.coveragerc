@@ -1,0 +1,12 @@
+[run]
+source = .
+branch = True
+
+[report]
+omit =
+    */tests/*
+    */migrations/*
+    */__init__.py
+
+# Показывать только файлы views.py
+include = */views.py
