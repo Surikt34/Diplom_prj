@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 from decouple import config
 from pathlib import Path
 
+
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -148,9 +150,12 @@ SPECTACULAR_SETTINGS = {
     'DESCRIPTION': 'Документация для моего API',
     'VERSION': '1.0.0',
     'ENUM_NAME_OVERRIDES': {
-        'orders.models.Order.status': 'OrderStatusEnum',
-        'users.models.CustomUser.role': 'UserRoleEnum',
+        'users.models.CustomUser.role': 'UserRoleEnum'
     },
+    'PREPROCESSING_HOOKS': [
+        'orders.hooks.override_order_status_choices_enum',
+    ],
+    'DEBUG': True,
 }
 
 

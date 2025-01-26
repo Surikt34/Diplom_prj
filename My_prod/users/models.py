@@ -2,6 +2,18 @@ from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.db import models
 from django.core.validators import RegexValidator
 
+from enum import Enum
+
+class UserRoleEnum(Enum):
+    CLIENT = "client"
+    SUPPLIER = "supplier"
+    ADMIN = "admin"
+
+    @classmethod
+    def choices(cls):
+        return [(role.value, role.name) for role in cls]
+
+
 class CustomUserManager(BaseUserManager):
     # Метод для создания пользователя
     def create_user(self, email, password=None, **extra_fields):
@@ -28,11 +40,7 @@ class CustomUserManager(BaseUserManager):
 
 
 class CustomUser(AbstractUser):
-    ROLE_CHOICES = (
-        ('client', 'Client'),
-        ('supplier', 'Supplier'),
-        ('admin', 'Admin'),
-    )
+    ROLE_CHOICES = UserRoleEnum.choices()
     role = models.CharField(max_length=20, choices=ROLE_CHOICES, default='client', verbose_name="Роль")
     phone = models.CharField(
         max_length=15,

@@ -6,11 +6,11 @@ from rest_framework.views import APIView
 from django.db import models
 from .models import Order, OrderItem, Cart, CartItem, Contact
 from .serializers import OrderSerializer, CreateOrderSerializer, CartSerializer, ContactSerializer, \
-    UpdateOrderStatusSerializer, ConfirmOrderSerializer, CartItemCreateSerializer
+    UpdateOrderStatusSerializer, ConfirmOrderSerializer, CartItemCreateSerializer, CartItemSerializer
 from catalog.models import Product
 from .utils import send_order_confirmation
 from .tasks import send_order_confirmation_task, send_order_status_update_task, send_order_confirmation_task, clear_cart_task
-
+from drf_spectacular.utils import extend_schema
 
 
 class OrderListView(generics.ListAPIView):
@@ -46,13 +46,11 @@ class CreateOrderView(generics.CreateAPIView):
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
 
-class CartView(GenericAPIView):
-    """
-    Управление корзиной пользователя.
-    """
+class GetCartView(GenericAPIView):
     serializer_class = CartSerializer
     permission_classes = [IsAuthenticated]
 
+    @extend_schema(operation_id="get_cart_content")
     def get(self, request):
         """
         Получить содержимое корзины.
@@ -61,11 +59,16 @@ class CartView(GenericAPIView):
         serializer = self.serializer_class(cart)
         return Response(serializer.data)
 
+class AddToCartView(GenericAPIView):
+    serializer_class = CartItemCreateSerializer
+    permission_classes = [IsAuthenticated]
+
+    @extend_schema(operation_id="add_to_cart")
     def post(self, request):
         """
         Добавить товар в корзину или обновить его количество.
         """
-        serializer = CartItemCreateSerializer(data=request.data)
+        serializer = self.serializer_class(data=request.data)
         if serializer.is_valid():
             cart, _ = Cart.objects.get_or_create(user=request.user)
             product = Product.objects.get(id=serializer.validated_data['product_id'])
@@ -80,6 +83,14 @@ class CartView(GenericAPIView):
             return Response({'success': True}, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+class RemoveFromCartView(GenericAPIView):
+    """
+    Отображение для удаления товара из корзины.
+    """
+    serializer_class = CartItemSerializer
+    permission_classes = [IsAuthenticated]
+
+    @extend_schema(operation_id="remove_from_cart")
     def delete(self, request, pk):
         """
         Удалить товар из корзины.

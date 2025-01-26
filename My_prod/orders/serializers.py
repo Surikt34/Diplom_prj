@@ -95,3 +95,5 @@ class ConfirmOrderSerializer(serializers.Serializer):
     сериализатор для подтверждения заказа
     """
     contact_id = serializers.IntegerField()
+
+
