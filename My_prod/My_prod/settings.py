@@ -143,6 +143,12 @@ REST_FRAMEWORK = {
 
 AUTH_USER_MODEL = 'users.CustomUser'
 
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'My Project API',
+    'DESCRIPTION': 'Документация для моего API',
+    'VERSION': '1.0.0',
+}
+
 
 # Настройки для отправки email через SMTP
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
