@@ -147,6 +147,10 @@ SPECTACULAR_SETTINGS = {
     'TITLE': 'My Project API',
     'DESCRIPTION': 'Документация для моего API',
     'VERSION': '1.0.0',
+    'ENUM_NAME_OVERRIDES': {
+        'orders.models.Order.status': 'OrderStatusEnum',
+        'users.models.CustomUser.role': 'UserRoleEnum',
+    },
 }
 
 
