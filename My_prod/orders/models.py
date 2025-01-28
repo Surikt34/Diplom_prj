@@ -1,13 +1,15 @@
 from django.db import models
 from django.conf import settings
 from catalog.models import Product
+from .enums import OrderStatusEnum
+
 
 class Order(models.Model):
-    ORDER_STATUS_CHOICES= (
-        ('new', 'Новый'),
-        ('processing', 'В обработке'),
-        ('completed', 'Завершён'),
-        ('canceled', 'Отменён'),
+    status = models.CharField(
+        max_length=20,
+        choices=OrderStatusEnum.choices(),
+        default=OrderStatusEnum.NEW.value,
+        verbose_name="Статус"
     )
 
     user = models.ForeignKey(
@@ -18,12 +20,7 @@ class Order(models.Model):
     )
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Дата создания")
     updated_at = models.DateTimeField(auto_now=True, verbose_name="Дата обновления")
-    status = models.CharField(
-        max_length=20,
-        choices=ORDER_STATUS_CHOICES,
-        default='new',
-        verbose_name="Статус"
-    )
+
     total_price = models.DecimalField(
         max_digits=10,
         decimal_places=2,

@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Order, OrderItem, CartItem, Cart, Contact
+from .models import Order, OrderItem, CartItem, Cart, Contact, OrderStatusEnum
 from catalog.models import Product
 
 
@@ -79,7 +79,7 @@ class UpdateOrderStatusSerializer(serializers.Serializer):
     """
     для обработки статуса заказа.
     """
-    status = serializers.ChoiceField(choices=['pending', 'completed', 'canceled'])
+    status = serializers.ChoiceField(choices=OrderStatusEnum.choices())
 
 
 class CartItemCreateSerializer(serializers.Serializer):

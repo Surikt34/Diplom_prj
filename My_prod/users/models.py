@@ -1,17 +1,7 @@
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.db import models
 from django.core.validators import RegexValidator
-
-from enum import Enum
-
-class UserRoleEnum(Enum):
-    CLIENT = "client"
-    SUPPLIER = "supplier"
-    ADMIN = "admin"
-
-    @classmethod
-    def choices(cls):
-        return [(role.value, role.name) for role in cls]
+from .enums import UserRoleEnum
 
 
 class CustomUserManager(BaseUserManager):
@@ -40,8 +30,12 @@ class CustomUserManager(BaseUserManager):
 
 
 class CustomUser(AbstractUser):
-    ROLE_CHOICES = UserRoleEnum.choices()
-    role = models.CharField(max_length=20, choices=ROLE_CHOICES, default='client', verbose_name="Роль")
+    role = models.CharField(
+        max_length=20,
+        choices=UserRoleEnum.choices(),
+        default=UserRoleEnum.CLIENT.value,
+        verbose_name="Роль"
+    )
     phone = models.CharField(
         max_length=15,
         blank=True,
@@ -54,6 +48,10 @@ class CustomUser(AbstractUser):
     avatar = models.ImageField(upload_to='avatars/', blank=True, null=True, verbose_name="Аватар")
     is_verified = models.BooleanField(default=False, verbose_name="Пользователь верифицирован")
     email = models.EmailField(unique=True, verbose_name="Email")
+
+    # для интеграции с Google
+    google_id = models.CharField(max_length=50, blank=True, null=True, unique=True, verbose_name="Google ID")
+    google_profile_picture = models.URLField(blank=True, null=True, verbose_name="Фото профиля Google")
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['first_name', 'last_name']
