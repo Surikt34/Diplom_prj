@@ -1,0 +1,23 @@
+/* static/css/custom_admin.css */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f8f9fa; /* Светлый фон */
+}
+
+.nav-sidebar {
+    background-color: #343a40; /* Тёмная боковая панель */
+    color: white;
+}
+
+.nav-sidebar .nav-item a {
+    color: white; /* Белый текст в боковом меню */
+}
+
+.nav-sidebar .nav-item a:hover {
+    color: #ffc107; /* Жёлтый при наведении */
+}
+
+.navbar-brand {
+    font-weight: bold;
+    color: #007bff; /* Цвет заголовка */
+}

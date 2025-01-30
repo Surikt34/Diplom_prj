@@ -35,6 +35,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'baton',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -129,6 +130,13 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
+STATIC_ROOT = BASE_DIR / "staticfiles"
+BATON_STATIC_DIR = BASE_DIR / 'baton/static'
+
+STATICFILES_DIRS = [
+    BASE_DIR / "static",
+]
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
@@ -211,3 +219,54 @@ SOCIAL_AUTH_PIPELINE = (
     'social_core.pipeline.social_auth.associate_user',
     'social_core.pipeline.social_auth.load_extra_data',
 )
+
+
+# настройки интерфейса админки
+BATON = {
+    'SITE_HEADER': 'My Admin',  # Заголовок в шапке админки
+    'SITE_TITLE': 'My Admin Panel',  # Заголовок на вкладке
+    'site_logo': '/static/logo/my_logo.png',
+    'site_logo_classes': 'img-circle',
+    'INDEX_TITLE': 'Добро пожаловать в панель управления',  # Текст на главной странице админки
+    'SUPPORT_HREF': 'mail@mail.ru',  # Ссылка на поддержку
+    'COPYRIGHT': '© 2025 My Company',  # Текст копирайта
+    'POWERED_BY': '<a href="https://github.com/otto-torino/django-baton">Django Baton</a>',
+    'POWERED_BY_LINK': 'https://github.com/otto-torino/django-baton',
+    'MENU':   (
+        {'type': 'title', 'label': 'Управление сайтом'},
+    {
+        'type': 'app',
+        'name': 'auth',
+        'label': 'Пользователи',
+        'icon': 'fa fa-users',
+        'models': [
+            {'name': 'user', 'label': 'Пользователи', 'icon': 'fa fa-user'},
+            {'name': 'group', 'label': 'Группы', 'icon': 'fa fa-users-cog'},
+        ],
+    },
+    {'type': 'app', 'name': 'orders', 'label': 'Заказы', 'icon': 'fa fa-shopping-cart'},
+    {'type': 'app', 'name': 'catalog', 'label': 'Каталог', 'icon': 'fa fa-list-alt'},
+    {'type': 'free', 'label': 'Документация', 'url': '/api/docs', 'icon': 'fa fa-file-text'},
+    ),
+    'ANALYTICS': {
+        'CREDENTIALS': {
+            'type': 'service_account',
+            'project_id': '<project_id>',
+            'private_key_id': '<private_key_id>',
+            'private_key': '<private_key>',
+            'client_email': '<client_email>',
+            'client_id': '<client_id>',
+            'auth_uri': 'https://accounts.google.com/o/oauth2/auth',
+            'token_uri': 'https://accounts.google.com/o/oauth2/token',
+            'auth_provider_x509_cert_url': 'https://www.googleapis.com/oauth2/v1/certs',
+            'client_x509_cert_url': '<client_x509_cert_url>',
+        },
+        'VIEW_ID': '<view_id>',
+    },
+    'CUSTOM_STYLE': 'css/custom_admin.css',
+    'ENABLE_THEMES': True,
+
+}
+
+LANGUAGE_CODE = 'ru-ru'
+TIME_ZONE = 'Europe/Moscow'

@@ -25,3 +25,5 @@ class ProductAttributeAdmin(admin.ModelAdmin):
 @admin.register(ProductImage)
 class ProductImageAdmin(admin.ModelAdmin):
     list_display = ('product', 'is_main')
+
+
