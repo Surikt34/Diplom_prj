@@ -227,7 +227,6 @@ BATON = {
     'SITE_TITLE': 'My Admin Panel',  # Заголовок на вкладке
     'site_logo': '/static/logo/my_logo.png',
     'site_logo_classes': 'img-circle',
-    'INDEX_TITLE': 'Добро пожаловать в панель управления',  # Текст на главной странице админки
     'SUPPORT_HREF': 'mail@mail.ru',  # Ссылка на поддержку
     'COPYRIGHT': '© 2025 My Company',  # Текст копирайта
     'POWERED_BY': '<a href="https://github.com/otto-torino/django-baton">Django Baton</a>',
