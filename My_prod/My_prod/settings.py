@@ -233,21 +233,21 @@ BATON = {
     'COPYRIGHT': '© 2025 My Company',  # Текст копирайта
     'POWERED_BY': '<a href="https://github.com/otto-torino/django-baton">Django Baton</a>',
     'POWERED_BY_LINK': 'https://github.com/otto-torino/django-baton',
-    'MENU':   (
+    'MENU': (
         {'type': 'title', 'label': 'Управление сайтом'},
-    {
-        'type': 'app',
-        'name': 'auth',
-        'label': 'Пользователи',
-        'icon': 'fa fa-users',
-        'models': [
-            {'name': 'user', 'label': 'Пользователи', 'icon': 'fa fa-user'},
-            {'name': 'group', 'label': 'Группы', 'icon': 'fa fa-users-cog'},
-        ],
-    },
-    {'type': 'app', 'name': 'orders', 'label': 'Заказы', 'icon': 'fa fa-shopping-cart'},
-    {'type': 'app', 'name': 'catalog', 'label': 'Каталог', 'icon': 'fa fa-list-alt'},
-    {'type': 'free', 'label': 'Документация', 'url': '/api/docs', 'icon': 'fa fa-file-text'},
+        {
+            'type': 'app',
+            'name': 'users',  # Имя вашего приложения, где зарегистрирован CustomUser
+            'label': 'Пользователи',
+            'icon': 'fa fa-users',
+            'models': [
+                {'name': 'customuser', 'label': 'Пользователи', 'icon': 'fa fa-user'},
+                {'name': 'group', 'label': 'Группы', 'icon': 'fa fa-users-cog'},
+            ],
+        },
+        {'type': 'app', 'name': 'orders', 'label': 'Заказы', 'icon': 'fa fa-shopping-cart'},
+        {'type': 'app', 'name': 'catalog', 'label': 'Каталог', 'icon': 'fa fa-list-alt'},
+        {'type': 'free', 'label': 'Документация', 'url': '/api/docs', 'icon': 'fa fa-file-text'},
     ),
     'ANALYTICS': {
         'CREDENTIALS': {
@@ -276,8 +276,8 @@ BATON = {
         'url': '/api/path/',
     },
 
-
 }
+
 MEDIA_ROOT = BASE_DIR / 'media'
 MEDIA_URL = '/media/'
 
