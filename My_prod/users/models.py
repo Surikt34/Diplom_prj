@@ -1,6 +1,8 @@
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.db import models
 from django.core.validators import RegexValidator
+from versatileimagefield.fields import VersatileImageField
+
 from .enums import UserRoleEnum
 
 
@@ -45,9 +47,14 @@ class CustomUser(AbstractUser):
     )
     address = models.TextField(blank=True, null=True, verbose_name="Адрес")
     date_of_birth = models.DateField(blank=True, null=True, verbose_name="Дата рождения")
-    avatar = models.ImageField(upload_to='avatars/', blank=True, null=True, verbose_name="Аватар")
     is_verified = models.BooleanField(default=False, verbose_name="Пользователь верифицирован")
     email = models.EmailField(unique=True, verbose_name="Email")
+    avatar = VersatileImageField(
+        'Аватар',
+        upload_to='avatars/',
+        blank=True,
+        null=True
+    )
 
     # для интеграции с Google
     google_id = models.CharField(max_length=50, blank=True, null=True, unique=True, verbose_name="Google ID")

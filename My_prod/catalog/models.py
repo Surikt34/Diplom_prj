@@ -1,4 +1,5 @@
 from django.db import models
+from versatileimagefield.fields import VersatileImageField
 
 
 class Category(models.Model):
@@ -91,7 +92,11 @@ class ProductImage(models.Model):
         related_name='images',
         verbose_name="Товар"
     )
-    image = models.ImageField(upload_to='products/images/', verbose_name="Изображение")
+    image = VersatileImageField(
+        'Изображение',
+        upload_to='catalog/products/',
+        placeholder_image='placeholder.jpg'  # изображение по умолчанию
+    )
     alt_text = models.CharField(
         max_length=255,
         blank=True,

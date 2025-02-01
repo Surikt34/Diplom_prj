@@ -1,6 +1,6 @@
 from django.contrib import admin
 from .models import Category, Product, Supplier, ProductAttribute, ProductImage
-from django.contrib.admin import SimpleListFilter  # Используем базовый фильтр
+from django.contrib.admin import SimpleListFilter  #  базовый фильтр
 
 # Кастомный фильтр для поиска по названию
 class NameFilter(SimpleListFilter):

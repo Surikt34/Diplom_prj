@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/5.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
+from baton.ai import AIModels
 from decouple import config
 from pathlib import Path
 
@@ -49,6 +50,7 @@ INSTALLED_APPS = [
     'django_filters',
     'rest_framework',
     'social_django',
+    'versatileimagefield',
 ]
 
 MIDDLEWARE = [
@@ -128,14 +130,6 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-STATIC_URL = 'static/'
-
-STATIC_ROOT = BASE_DIR / "staticfiles"
-BATON_STATIC_DIR = BASE_DIR / 'baton/static'
-
-STATICFILES_DIRS = [
-    BASE_DIR / "static",
-]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
@@ -220,10 +214,18 @@ SOCIAL_AUTH_PIPELINE = (
     'social_core.pipeline.social_auth.load_extra_data',
 )
 
+STATIC_URL = '/static/'
+
+STATIC_ROOT = BASE_DIR / "staticfiles"
+BATON_STATIC_DIR = BASE_DIR / 'baton/static'
+
+STATICFILES_DIRS = [
+    BASE_DIR / "static",
+]
 
 # настройки интерфейса админки
 BATON = {
-    'SITE_HEADER': 'My Admin',  # Заголовок в шапке админки
+    'SITE_HEADER': 'Управление сайтом',  # Заголовок в шапке админки
     'SITE_TITLE': 'My Admin Panel',  # Заголовок на вкладке
     'site_logo': '/static/logo/my_logo.png',
     'site_logo_classes': 'img-circle',
@@ -263,9 +265,22 @@ BATON = {
         'VIEW_ID': '<view_id>',
     },
     'CUSTOM_STYLE': 'css/custom_admin.css',
-    'ENABLE_THEMES': True,
+    'ENABLE_THEMES': True,  # Показывать меню выбора темы
+    'CONFIRM_UNSAVED_CHANGES': True,    # Показывать предупреждение при несохранённых изменениях
+    'ENABLE_IMAGES_PREVIEW': True,  # Показывать предварительное просмотр изображений
+    'IMAGE_PREVIEW_WIDTH': 200,  # Ширина предварительного просмотра изображений
+    'CHANGELIST_FILTERS_IN_MODAL': True,        # Показывать фильтры в модальном окне
+    'MENU_TITLE': 'Навигация',
+    'SEARCH_FIELD': {
+        'label': 'поиск',
+        'url': '/api/path/',
+    },
+
 
 }
+MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_URL = '/media/'
+
 
 LANGUAGE_CODE = 'ru-ru'
 TIME_ZONE = 'Europe/Moscow'
