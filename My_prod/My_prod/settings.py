@@ -281,6 +281,14 @@ BATON = {
 MEDIA_ROOT = BASE_DIR / 'media'
 MEDIA_URL = '/media/'
 
+VERSATILEIMAGEFIELD_RENDITION_KEY_SETS = {
+    'default': [
+        ('thumbnail_small', '100x100'),
+        ('thumbnail_medium', '300x300'),
+        ('thumbnail_large', '600x600'),
+    ],
+}
+
 
 LANGUAGE_CODE = 'ru-ru'
 TIME_ZONE = 'Europe/Moscow'
