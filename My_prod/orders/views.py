@@ -2,6 +2,7 @@ from rest_framework import generics, status
 from rest_framework.generics import ListAPIView, GenericAPIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
+from rest_framework.throttling import UserRateThrottle, SimpleRateThrottle
 from rest_framework.views import APIView
 from django.db import models
 from .models import Order, OrderItem, Cart, CartItem, Contact
@@ -12,6 +13,11 @@ from .utils import send_order_confirmation
 from .tasks import send_order_confirmation_task, send_order_status_update_task, send_order_confirmation_task, clear_cart_task
 from drf_spectacular.utils import extend_schema
 
+class BurstRateThrottle(SimpleRateThrottle):
+    scope = 'burst'
+
+    def get_cache_key(self, request, view):
+        return self.get_ident(request)  # Ограничение по IP
 
 class OrderListView(generics.ListAPIView):
     """
@@ -42,6 +48,7 @@ class CreateOrderView(generics.CreateAPIView):
     """
     serializer_class = CreateOrderSerializer
     permission_classes = [IsAuthenticated]
+    throttle_classes = [UserRateThrottle]
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)

@@ -144,7 +144,17 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',
     ),
+    'DEFAULT_THROTTLE_CLASSES': [
+        'rest_framework.throttling.AnonRateThrottle',  # Для анонимных пользователей
+        'rest_framework.throttling.UserRateThrottle',  # Для аутентифицированных пользователей
+    ],
+    'DEFAULT_THROTTLE_RATES': {
+        'anon': '10/minute',  # 10 запросов в минуту для анонимных пользователей
+        'user': '100/hour',  # 100 запросов в час для аутентифицированных пользователей
+        'burst': '5/second',  # 5 запросов в секунду
+    }
 }
+
 
 AUTH_USER_MODEL = 'users.CustomUser'
 
