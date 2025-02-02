@@ -307,13 +307,6 @@ ROLLBAR = {
     'root': BASE_DIR,
 }
 
-# Инициализация Rollbar
-rollbar.init(
-    ROLLBAR['access_token'],
-    ROLLBAR['environment'],
-    code_version=ROLLBAR['code_version'],
-    root=ROLLBAR['root']
-)
 
 # поддержка Rollbar в системе логирования
 LOGGING = {
@@ -323,8 +316,8 @@ LOGGING = {
         'rollbar': {
             'level': 'ERROR',
             'class': 'rollbar.logger.RollbarHandler',
-            'access_token': 'ВАШ_ACCESS_TOKEN',
-            'environment': 'development' if DEBUG else 'production',
+            'access_token': ROLLBAR['access_token'],
+            'environment': ROLLBAR['environment'],
         },
     },
     'root': {
