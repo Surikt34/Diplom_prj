@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 from baton.ai import AIModels
 from decouple import config
 from pathlib import Path
+import rollbar
+import rollbar.contrib.django.middleware as rollbar_middleware
 
 
 
@@ -163,12 +165,6 @@ SPECTACULAR_SETTINGS = {
     'DESCRIPTION': 'Документация для моего API',
     'VERSION': '1.0.0',
     'DEBUG': True,
-    # не могу разобраться в чем ошибка генерации схемы
-    # 'ENUM_NAME_OVERRIDES': {
-    #     'users.enums.UserRoleEnum': 'UserRoleEnum',
-    #     'orders.enums.OrderStatusEnum': 'OrderStatusEnum',
-    # },
-
 }
 
 
@@ -299,6 +295,22 @@ VERSATILEIMAGEFIELD_RENDITION_KEY_SETS = {
     ],
 }
 
-
 LANGUAGE_CODE = 'ru-ru'
 TIME_ZONE = 'Europe/Moscow'
+
+
+# Настройка Rollbar
+ROLLBAR = {
+    'access_token': config('ROLLBAR_TOKEN'),
+    'environment': 'development' if DEBUG else 'production',
+    'code_version': '1.0',  # Можно обновлять при выпуске новых версий
+    'root': BASE_DIR,
+}
+
+# Инициализация Rollbar
+rollbar.init(
+    ROLLBAR['access_token'],
+    ROLLBAR['environment'],
+    code_version=ROLLBAR['code_version'],
+    root=ROLLBAR['root']
+)

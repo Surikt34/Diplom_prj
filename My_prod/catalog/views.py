@@ -83,3 +83,4 @@ class SupplierListView(generics.ListAPIView):
         response = super().list(request, *args, **kwargs)
         cache.set('supplier_list', response.data, timeout=60 * 15)
         return response
+

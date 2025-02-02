@@ -7,8 +7,22 @@ from .enums import UserRoleEnum
 
 
 class CustomUserManager(BaseUserManager):
-    # Метод для создания пользователя
+    """
+    Менеджер для работы с кастомной моделью пользователя.
+
+    Этот менеджер предоставляет методы для создания обычного пользователя
+    и суперпользователя, используя email в качестве основного поля для аутентификации.
+    """
     def create_user(self, email, password=None, **extra_fields):
+        """
+        Создает и сохраняет обычного пользователя с заданным email и паролем.
+
+        :param email: Email пользователя (обязательное поле).
+        :param password: Пароль пользователя.
+        :param extra_fields: Дополнительные поля модели пользователя.
+        :raises ValueError: Если email не предоставлен.
+        :return: Созданный экземпляр пользователя.
+        """
         if not email:
             raise ValueError('The Email field must be set')
         email = self.normalize_email(email)
@@ -18,8 +32,20 @@ class CustomUserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-    # Метод для создания суперпользователя
+
     def create_superuser(self, email, password=None, **extra_fields):
+        """
+        Создает и сохраняет суперпользователя с заданным email и паролем.
+
+        Для суперпользователя обязательны параметры is_staff=True и is_superuser=True.
+        Если эти параметры не установлены, будет выброшено исключение ValueError.
+
+        :param email: Email суперпользователя (обязательное поле).
+        :param password: Пароль суперпользователя.
+        :param extra_fields: Дополнительные поля модели суперпользователя.
+        :raises ValueError: Если is_staff или is_superuser не равны True.
+        :return: Созданный экземпляр суперпользователя.
+        """
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
 
@@ -32,6 +58,13 @@ class CustomUserManager(BaseUserManager):
 
 
 class CustomUser(AbstractUser):
+    """
+    Кастомная модель пользователя.
+
+    Модель наследуется от AbstractUser и использует email в качестве основного поля для аутентификации.
+    Дополнительно содержатся поля для хранения роли пользователя, телефона, адреса, даты рождения,
+    статуса верификации, аватара, а также интеграции с Google.
+    """
     role = models.CharField(
         max_length=20,
         choices=UserRoleEnum.choices(),
