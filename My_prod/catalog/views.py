@@ -86,3 +86,19 @@ class SupplierListView(generics.ListAPIView):
         cache.set('supplier_list', response.data, timeout=60 * 15)
         return response
 
+
+class RollbarTestAPIView(APIView):
+    """
+    APIView, которая вызывает исключение для тестирования интеграции с Rollbar.
+    """
+    permission_classes = []  # ОТКЛЮЧАЕМ ТРЕБОВАНИЕ АВТОРИЗАЦИИ
+
+    def get(self, request, *args, **kwargs):
+        try:
+            1 / 0  # Намеренно вызываем ошибку
+        except ZeroDivisionError:
+            rollbar.report_exc_info()  # Отправляем ошибку в Rollbar
+            return Response({"error": "Что-то пошло не так!"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+        return Response({"message": "Все в порядке!"}, status=status.HTTP_200_OK)
+

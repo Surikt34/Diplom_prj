@@ -4,6 +4,7 @@ from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 from django.conf import settings
 from django.conf.urls.static import static
 
+from catalog.views import RollbarTestAPIView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -15,6 +16,7 @@ urlpatterns = [
     path('api/orders/', include('orders.urls')),
     path('', include('users.urls')),
     path('social-auth/', include('social_django.urls', namespace='social')),
+    path('test-rollbar/', RollbarTestAPIView.as_view(), name='test-rollbar'),
 ]
 
 if settings.DEBUG:
