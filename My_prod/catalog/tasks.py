@@ -26,6 +26,7 @@ def cache_suppliers():
     serializer = SupplierSerializer(suppliers, many=True)
     cache.set('supplier_list', serializer.data, timeout=3600)  # Кэш на 1 час
 
+
 @shared_task
 def create_thumbnails(product_id):
     try:

@@ -314,3 +314,21 @@ rollbar.init(
     code_version=ROLLBAR['code_version'],
     root=ROLLBAR['root']
 )
+
+# поддержка Rollbar в системе логирования
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'rollbar': {
+            'level': 'ERROR',
+            'class': 'rollbar.logger.RollbarHandler',
+            'access_token': 'ВАШ_ACCESS_TOKEN',
+            'environment': 'development' if DEBUG else 'production',
+        },
+    },
+    'root': {
+        'level': 'WARNING',
+        'handlers': ['rollbar'],
+    },
+}
