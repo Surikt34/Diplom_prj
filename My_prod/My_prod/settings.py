@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'social_django',
     'versatileimagefield',
+    'cachalot',
 ]
 
 MIDDLEWARE = [
@@ -182,12 +183,23 @@ CELERY_BROKER_URL = 'redis://localhost:6379/0'  # URL Redis
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 
+
+# Настройка кэширования с использованием Redis
 CACHES = {
     'default': {
-        'BACKEND': 'django.core.cache.backends.redis.RedisCache',
+        'BACKEND': 'django_redis.cache.RedisCache',
         'LOCATION': 'redis://127.0.0.1:6379/1',
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
     }
 }
+
+#  автоматическое кэширование запросов с использованием django-cachalot
+CACHALOT_ENABLED = True
+CACHALOT_TIMEOUT = None  # Неограниченный срок хранения в кэше
+CACHALOT_CACHE = "default"  # Используем Redis как кэш
+CACHALOT_LOGGING = True
 
 # для авторизации через соц сети
 AUTHENTICATION_BACKENDS = [
