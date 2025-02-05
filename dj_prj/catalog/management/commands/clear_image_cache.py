@@ -2,6 +2,7 @@ from django.core.management.base import BaseCommand
 from versatileimagefield.files import VersatileImageFieldFile
 from catalog.models import ProductImage
 
+
 class Command(BaseCommand):
     help = "Очистка кэша миниатюр VersatileImageField"
 

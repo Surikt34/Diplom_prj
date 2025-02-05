@@ -48,11 +48,14 @@ def test_cachalot_improves_query_time(capfd):
     print(f"⚡ Второй запрос (из кэша): {second_time:.6f} секунд")
 
     # Проверяем, что второй запрос быстрее первого
-    assert second_time < first_time, "❌ Кэш не сработал, второй запрос не быстрее первого!"
+    assert (
+        second_time < first_time
+    ), "❌ Кэш не сработал, второй запрос не быстрее первого!"
 
     # Захватываем вывод теста
     captured = capfd.readouterr()
     print("\n💡 Лог времени выполнения:\n", captured.out)
+
 
 @pytest.mark.django_db
 def test_cachalot_cache_clear(django_assert_num_queries):
@@ -62,7 +65,9 @@ def test_cachalot_cache_clear(django_assert_num_queries):
     cache.clear()
 
     category = Category.objects.create(name="Test Category")
-    product = Product.objects.create(name="Test Product", category=category, price=100, stock=10)
+    product = Product.objects.create(
+        name="Test Product", category=category, price=100, stock=10
+    )
 
     # Первый запрос (должен сделать SQL-запрос)
     with django_assert_num_queries(1):

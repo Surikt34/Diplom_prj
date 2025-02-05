@@ -14,8 +14,8 @@ class UserAPITestCase(APITestCase):
             last_name="User",
             phone="+1234567890",
         )
-        self.register_url = reverse('register')
-        self.profile_url = reverse('profile')
+        self.register_url = reverse("register")
+        self.profile_url = reverse("profile")
 
     def test_register_user(self):
         """Тест регистрации пользователя"""
@@ -30,7 +30,9 @@ class UserAPITestCase(APITestCase):
         response = self.client.post(self.register_url, data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(CustomUser.objects.count(), 2)
-        self.assertEqual(CustomUser.objects.get(username="newuser").email, "newuser@example.com")
+        self.assertEqual(
+            CustomUser.objects.get(username="newuser").email, "newuser@example.com"
+        )
 
     def test_register_with_existing_email(self):
         """Тест регистрации с уже существующим email"""
@@ -63,7 +65,7 @@ class UserAPITestCase(APITestCase):
         self.client.force_authenticate(user=self.user)
         response = self.client.get(self.profile_url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data['email'], self.user.email)
+        self.assertEqual(response.data["email"], self.user.email)
 
     def test_update_user_profile(self):
         """Тест обновления профиля пользователя"""

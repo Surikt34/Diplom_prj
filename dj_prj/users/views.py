@@ -10,10 +10,12 @@ from .tasks import send_welcome_email
 
 User = get_user_model()
 
+
 class RegisterView(GenericAPIView):
     """
     Эндпоинт для регистрации нового пользователя.
     """
+
     permission_classes = [AllowAny]
     serializer_class = RegisterSerializer
 
@@ -28,10 +30,12 @@ class RegisterView(GenericAPIView):
             return Response(UserSerializer(user).data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
 class UserProfileView(RetrieveUpdateAPIView):
     """
     Эндпоинт для получения и обновления профиля пользователя.
     """
+
     permission_classes = [IsAuthenticated]
     serializer_class = UserSerializer
 
@@ -40,4 +44,3 @@ class UserProfileView(RetrieveUpdateAPIView):
         Возвращает текущего пользователя.
         """
         return self.request.user
-

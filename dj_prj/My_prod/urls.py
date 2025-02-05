@@ -7,16 +7,20 @@ from django.conf.urls.static import static
 from catalog.views import RollbarTestAPIView
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('baton/', include('baton.urls')),
-    path('api/catalog/', include('catalog.urls')),
-    path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
-    path('api/docs/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
-    path('api/users/', include('users.urls')),
-    path('api/orders/', include('orders.urls')),
-    path('', include('users.urls')),
-    path('social-auth/', include('social_django.urls', namespace='social')),
-    path('test-rollbar/', RollbarTestAPIView.as_view(), name='test-rollbar'),
+    path("admin/", admin.site.urls),
+    path("baton/", include("baton.urls")),
+    path("api/catalog/", include("catalog.urls")),
+    path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
+    path(
+        "api/docs/",
+        SpectacularSwaggerView.as_view(url_name="schema"),
+        name="swagger-ui",
+    ),
+    path("api/users/", include("users.urls")),
+    path("api/orders/", include("orders.urls")),
+    path("", include("users.urls")),
+    path("social-auth/", include("social_django.urls", namespace="social")),
+    path("test-rollbar/", RollbarTestAPIView.as_view(), name="test-rollbar"),
 ]
 
 if settings.DEBUG:

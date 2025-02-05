@@ -2,6 +2,7 @@ from celery import shared_task
 from django.core.mail import send_mail
 from .models import Order
 
+
 @shared_task
 def send_order_confirmation_task(order_id):
     """Отправка подтверждения заказа"""
@@ -12,13 +13,14 @@ def send_order_confirmation_task(order_id):
         send_mail(
             subject,
             message,
-            'from@example.com',
+            "from@example.com",
             [order.user.email],  # Email клиента
             fail_silently=False,
         )
         return f"Подтверждение заказа #{order.id} отправлено."
     except Order.DoesNotExist:
         return f"Заказ с ID {order_id} не найден."
+
 
 @shared_task
 def send_order_status_update_task(order_id, status):
@@ -30,7 +32,7 @@ def send_order_status_update_task(order_id, status):
         send_mail(
             subject,
             message,
-            'from@example.com',
+            "from@example.com",
             [order.user.email],
             fail_silently=False,
         )
@@ -38,11 +40,13 @@ def send_order_status_update_task(order_id, status):
     except Order.DoesNotExist:
         return f"Заказ с ID {order_id} не найден."
 
+
 @shared_task
 def clear_cart_task(cart_id):
     """
     Очистка корзины после подтверждения заказа.
     """
     from orders.models import Cart
+
     cart = Cart.objects.get(id=cart_id)
     cart.items.all().delete()

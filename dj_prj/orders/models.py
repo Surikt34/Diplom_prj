@@ -9,23 +9,20 @@ class Order(models.Model):
         max_length=20,
         choices=OrderStatusEnum.choices(),
         default=OrderStatusEnum.NEW.value,
-        verbose_name="Статус"
+        verbose_name="Статус",
     )
 
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
-        related_name='orders',
-        verbose_name="Пользователь"
+        related_name="orders",
+        verbose_name="Пользователь",
     )
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Дата создания")
     updated_at = models.DateTimeField(auto_now=True, verbose_name="Дата обновления")
 
     total_price = models.DecimalField(
-        max_digits=10,
-        decimal_places=2,
-        default=0,
-        verbose_name="Общая стоимость"
+        max_digits=10, decimal_places=2, default=0, verbose_name="Общая стоимость"
     )
 
     class Meta:
@@ -38,21 +35,12 @@ class Order(models.Model):
 
 class OrderItem(models.Model):
     order = models.ForeignKey(
-        Order,
-        on_delete=models.CASCADE,
-        related_name='items',
-        verbose_name="Заказ"
+        Order, on_delete=models.CASCADE, related_name="items", verbose_name="Заказ"
     )
-    product = models.ForeignKey(
-        Product,
-        on_delete=models.CASCADE,
-        verbose_name="Товар"
-    )
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name="Товар")
     quantity = models.PositiveIntegerField(default=1, verbose_name="Количество")
     price = models.DecimalField(
-        max_digits=10,
-        decimal_places=2,
-        verbose_name="Цена за единицу"
+        max_digits=10, decimal_places=2, verbose_name="Цена за единицу"
     )
 
     class Meta:
@@ -64,11 +52,13 @@ class OrderItem(models.Model):
 
 
 class Cart(models.Model):
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='cart')
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="cart"
+    )
 
 
 class CartItem(models.Model):
-    cart = models.ForeignKey(Cart, on_delete=models.CASCADE, related_name='items')
+    cart = models.ForeignKey(Cart, on_delete=models.CASCADE, related_name="items")
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(default=1)
 

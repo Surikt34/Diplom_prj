@@ -2,6 +2,7 @@ from django.core.mail import send_mail
 from django.conf import settings
 import logging
 
+
 def send_order_confirmation(order):
     try:
         subject = f"Ваш заказ #{order.id} подтверждён"

@@ -10,21 +10,21 @@ from .serializers import CategorySerializer, ProductSerializer, SupplierSerializ
 def cache_categories():
     categories = Category.objects.all()
     serializer = CategorySerializer(categories, many=True)
-    cache.set('category_list', serializer.data, timeout=3600)  # Кэш на 1 час
+    cache.set("category_list", serializer.data, timeout=3600)  # Кэш на 1 час
 
 
 @shared_task
 def cache_products():
     products = Product.objects.all()
     serializer = ProductSerializer(products, many=True)
-    cache.set('product_list', serializer.data, timeout=3600)  # Кэш на 1 час
+    cache.set("product_list", serializer.data, timeout=3600)  # Кэш на 1 час
 
 
 @shared_task
 def cache_suppliers():
     suppliers = Supplier.objects.all()
     serializer = SupplierSerializer(suppliers, many=True)
-    cache.set('supplier_list', serializer.data, timeout=3600)  # Кэш на 1 час
+    cache.set("supplier_list", serializer.data, timeout=3600)  # Кэш на 1 час
 
 
 @shared_task
@@ -34,8 +34,8 @@ def create_thumbnails(product_id):
         if product.images:
             warmer = VersatileImageFieldWarmer(
                 instance_or_queryset=product,
-                rendition_key_set='default',
-                image_attr='image'
+                rendition_key_set="default",
+                image_attr="image",
             )
             warmer.warm()
     except Product.DoesNotExist:

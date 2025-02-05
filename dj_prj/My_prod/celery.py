@@ -5,22 +5,23 @@ from celery.signals import task_failure
 import rollbar
 
 # Установка настроек Django для Celery
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'dj_prj.settings')
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "dj_prj.settings")
 
-app = Celery('dj_prj')
+app = Celery("dj_prj")
 
 # настройки Django как основу для конфигурации Celery
-app.config_from_object('django.conf:settings', namespace='CELERY')
+app.config_from_object("django.conf:settings", namespace="CELERY")
 
 # Автоматическое обнаружение задач в приложениях Django
 app.autodiscover_tasks()
 
+
 @app.task(bind=True)
 def debug_task(self):
-    print(f'Request: {self.request!r}')
+    print(f"Request: {self.request!r}")
 
 
 # Автоматический мониторинг ошибок Celery
 @task_failure.connect
 def handle_task_failure(sender, task_id, args, kwargs, einfo, **other_kwargs):
-    rollbar.report_exc_info(extra_data={'task_id': task_id})
+    rollbar.report_exc_info(extra_data={"task_id": task_id})

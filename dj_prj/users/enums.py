@@ -1,5 +1,6 @@
 from enum import Enum
 
+
 class UserRoleEnum(Enum):
     CLIENT = "client"
     SUPPLIER = "supplier"

@@ -8,81 +8,238 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='Supplier',
+            name="Supplier",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=255, unique=True, verbose_name='Название поставщика')),
-                ('email', models.EmailField(max_length=254, verbose_name='Email поставщика')),
-                ('phone', models.CharField(blank=True, max_length=20, verbose_name='Телефон поставщика')),
-                ('address', models.TextField(blank=True, null=True, verbose_name='Адрес')),
-                ('is_active', models.BooleanField(default=True, verbose_name='Активен ли поставщик')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "name",
+                    models.CharField(
+                        max_length=255, unique=True, verbose_name="Название поставщика"
+                    ),
+                ),
+                (
+                    "email",
+                    models.EmailField(max_length=254, verbose_name="Email поставщика"),
+                ),
+                (
+                    "phone",
+                    models.CharField(
+                        blank=True, max_length=20, verbose_name="Телефон поставщика"
+                    ),
+                ),
+                (
+                    "address",
+                    models.TextField(blank=True, null=True, verbose_name="Адрес"),
+                ),
+                (
+                    "is_active",
+                    models.BooleanField(
+                        default=True, verbose_name="Активен ли поставщик"
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'Поставщик',
-                'verbose_name_plural': 'Поставщики',
+                "verbose_name": "Поставщик",
+                "verbose_name_plural": "Поставщики",
             },
         ),
         migrations.CreateModel(
-            name='Category',
+            name="Category",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=255, unique=True, verbose_name='Название категории')),
-                ('description', models.TextField(blank=True, null=True, verbose_name='Описание категории')),
-                ('parent', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='subcategories', to='catalog.category', verbose_name='Родительская категория')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "name",
+                    models.CharField(
+                        max_length=255, unique=True, verbose_name="Название категории"
+                    ),
+                ),
+                (
+                    "description",
+                    models.TextField(
+                        blank=True, null=True, verbose_name="Описание категории"
+                    ),
+                ),
+                (
+                    "parent",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        related_name="subcategories",
+                        to="catalog.category",
+                        verbose_name="Родительская категория",
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'Категория',
-                'verbose_name_plural': 'Категории',
+                "verbose_name": "Категория",
+                "verbose_name_plural": "Категории",
             },
         ),
         migrations.CreateModel(
-            name='Product',
+            name="Product",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=255, verbose_name='Название товара')),
-                ('price', models.DecimalField(decimal_places=2, max_digits=10, verbose_name='Цена')),
-                ('stock', models.PositiveIntegerField(verbose_name='Количество на складе')),
-                ('description', models.TextField(blank=True, verbose_name='Описание товара')),
-                ('created_at', models.DateTimeField(auto_now_add=True, verbose_name='Дата добавления')),
-                ('updated_at', models.DateTimeField(auto_now=True, verbose_name='Дата последнего обновления')),
-                ('category', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='products', to='catalog.category', verbose_name='Категория')),
-                ('suppliers', models.ManyToManyField(related_name='products', to='catalog.supplier', verbose_name='Поставщики')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "name",
+                    models.CharField(max_length=255, verbose_name="Название товара"),
+                ),
+                (
+                    "price",
+                    models.DecimalField(
+                        decimal_places=2, max_digits=10, verbose_name="Цена"
+                    ),
+                ),
+                (
+                    "stock",
+                    models.PositiveIntegerField(verbose_name="Количество на складе"),
+                ),
+                (
+                    "description",
+                    models.TextField(blank=True, verbose_name="Описание товара"),
+                ),
+                (
+                    "created_at",
+                    models.DateTimeField(
+                        auto_now_add=True, verbose_name="Дата добавления"
+                    ),
+                ),
+                (
+                    "updated_at",
+                    models.DateTimeField(
+                        auto_now=True, verbose_name="Дата последнего обновления"
+                    ),
+                ),
+                (
+                    "category",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="products",
+                        to="catalog.category",
+                        verbose_name="Категория",
+                    ),
+                ),
+                (
+                    "suppliers",
+                    models.ManyToManyField(
+                        related_name="products",
+                        to="catalog.supplier",
+                        verbose_name="Поставщики",
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'Товар',
-                'verbose_name_plural': 'Товары',
+                "verbose_name": "Товар",
+                "verbose_name_plural": "Товары",
             },
         ),
         migrations.CreateModel(
-            name='ProductAttribute',
+            name="ProductAttribute",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=255, verbose_name='Название характеристики')),
-                ('value', models.CharField(max_length=255, verbose_name='Значение')),
-                ('product', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='attributes', to='catalog.product', verbose_name='Товар')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "name",
+                    models.CharField(
+                        max_length=255, verbose_name="Название характеристики"
+                    ),
+                ),
+                ("value", models.CharField(max_length=255, verbose_name="Значение")),
+                (
+                    "product",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="attributes",
+                        to="catalog.product",
+                        verbose_name="Товар",
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'Характеристика товара',
-                'verbose_name_plural': 'Характеристики товаров',
+                "verbose_name": "Характеристика товара",
+                "verbose_name_plural": "Характеристики товаров",
             },
         ),
         migrations.CreateModel(
-            name='ProductImage',
+            name="ProductImage",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('image', models.ImageField(upload_to='products/images/', verbose_name='Изображение')),
-                ('alt_text', models.CharField(blank=True, max_length=255, verbose_name='Описание изображения (alt text)')),
-                ('is_main', models.BooleanField(default=False, verbose_name='Главное изображение')),
-                ('product', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='images', to='catalog.product', verbose_name='Товар')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "image",
+                    models.ImageField(
+                        upload_to="products/images/", verbose_name="Изображение"
+                    ),
+                ),
+                (
+                    "alt_text",
+                    models.CharField(
+                        blank=True,
+                        max_length=255,
+                        verbose_name="Описание изображения (alt text)",
+                    ),
+                ),
+                (
+                    "is_main",
+                    models.BooleanField(
+                        default=False, verbose_name="Главное изображение"
+                    ),
+                ),
+                (
+                    "product",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="images",
+                        to="catalog.product",
+                        verbose_name="Товар",
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'Изображение товара',
-                'verbose_name_plural': 'Изображения товаров',
+                "verbose_name": "Изображение товара",
+                "verbose_name_plural": "Изображения товаров",
             },
         ),
     ]

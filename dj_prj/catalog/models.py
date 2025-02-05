@@ -5,15 +5,19 @@ from versatileimagefield.placeholder import OnStoragePlaceholderImage
 
 class Category(models.Model):
     objects = models.Manager()
-    name = models.CharField(max_length=255, unique=True, verbose_name="Название категории")
-    description = models.TextField(blank=True, null=True, verbose_name="Описание категории")
+    name = models.CharField(
+        max_length=255, unique=True, verbose_name="Название категории"
+    )
+    description = models.TextField(
+        blank=True, null=True, verbose_name="Описание категории"
+    )
     parent = models.ForeignKey(
-        'self',
+        "self",
         on_delete=models.SET_NULL,
         blank=True,
         null=True,
-        related_name='subcategories',
-        verbose_name="Родительская категория"
+        related_name="subcategories",
+        verbose_name="Родительская категория",
     )  # Поддержка древовидной структуры категорий
 
     class Meta:
@@ -26,9 +30,13 @@ class Category(models.Model):
 
 class Supplier(models.Model):
     objects = models.Manager()
-    name = models.CharField(max_length=255, unique=True, verbose_name="Название поставщика")
+    name = models.CharField(
+        max_length=255, unique=True, verbose_name="Название поставщика"
+    )
     email = models.EmailField(verbose_name="Email поставщика")
-    phone = models.CharField(max_length=20, blank=True, verbose_name="Телефон поставщика")
+    phone = models.CharField(
+        max_length=20, blank=True, verbose_name="Телефон поставщика"
+    )
     address = models.TextField(blank=True, null=True, verbose_name="Адрес")
     is_active = models.BooleanField(default=True, verbose_name="Активен ли поставщик")
 
@@ -46,19 +54,19 @@ class Product(models.Model):
     category = models.ForeignKey(
         Category,
         on_delete=models.CASCADE,
-        related_name='products',
-        verbose_name="Категория"
+        related_name="products",
+        verbose_name="Категория",
     )
     suppliers = models.ManyToManyField(
-        Supplier,
-        related_name='products',
-        verbose_name="Поставщики"
+        Supplier, related_name="products", verbose_name="Поставщики"
     )
     price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Цена")
     stock = models.PositiveIntegerField(verbose_name="Количество на складе")
     description = models.TextField(blank=True, verbose_name="Описание товара")
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Дата добавления")
-    updated_at = models.DateTimeField(auto_now=True, verbose_name="Дата последнего обновления")
+    updated_at = models.DateTimeField(
+        auto_now=True, verbose_name="Дата последнего обновления"
+    )
 
     class Meta:
         verbose_name = "Товар"
@@ -72,8 +80,8 @@ class ProductAttribute(models.Model):
     product = models.ForeignKey(
         Product,
         on_delete=models.CASCADE,
-        related_name='attributes',
-        verbose_name="Товар"
+        related_name="attributes",
+        verbose_name="Товар",
     )
     name = models.CharField(max_length=255, verbose_name="Название характеристики")
     value = models.CharField(max_length=255, verbose_name="Значение")
@@ -88,22 +96,17 @@ class ProductAttribute(models.Model):
 
 class ProductImage(models.Model):
     product = models.ForeignKey(
-        Product,
-        on_delete=models.CASCADE,
-        related_name='images',
-        verbose_name="Товар"
+        Product, on_delete=models.CASCADE, related_name="images", verbose_name="Товар"
     )
     image = VersatileImageField(
-        'Изображение',
-        upload_to='catalog/products/',
+        "Изображение",
+        upload_to="catalog/products/",
         placeholder_image=OnStoragePlaceholderImage(
-            path='catalog/products/placeholder.jpg'
-        )
+            path="catalog/products/placeholder.jpg"
+        ),
     )
     alt_text = models.CharField(
-        max_length=255,
-        blank=True,
-        verbose_name="Описание изображения (alt text)"
+        max_length=255, blank=True, verbose_name="Описание изображения (alt text)"
     )
     is_main = models.BooleanField(default=False, verbose_name="Главное изображение")
 
