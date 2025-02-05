@@ -1,0 +1,29 @@
+.gitignore
+.venv/
+.env
+.idea/
+
+#  все папки __pycache__
+__pycache__/
+
+#  файлы кэша Python
+*.pyc
+*.pyo
+*.pyd
+
+#  файлы базы данных SQLite
+*.sqlite3
+
+#  логи и временные файлы
+*.log
+*.tmp
+*.swp
+*.swo
+
+
+.DS_Store.idea/
+.venv/
+.DS_Store
+.idea/
+.venv/
+.DS_Store
